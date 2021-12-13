@@ -7,14 +7,34 @@ on:
       - main
 
 jobs:
-  build-image:
+  build-base-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Build image
-        run: docker build -t ghcr.io/verifiedit/php:${GITHUB_RUN_NUMBER} -t ghcr.io/verifiedit/php:latest ./php
+        run: docker build -t ghcr.io/verifiedit/php:${GITHUB_RUN_NUMBER} -t ghcr.io/verifiedit/php:latest -f ./php/base.Dockerfile ./php
+
+      - name: Login to GHCR
+        uses: azure/docker-login@v1
+        with:
+          login-server: ghcr.io
+          username: $GITHUB_ACTOR
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push image(s) 🚀
+        run: docker push ghcr.io/verifiedit/php --all-tags
+
+  build-base-sqlsrv-image:
+    needs: build-base-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build -t ghcr.io/verifiedit/php:sqlsrv-${GITHUB_RUN_NUMBER} -t ghcr.io/verifiedit/php:sqlsrv-latest -f ./php/sqlsrv.base.Dockerfile ./php
 
       - name: Login to GHCR
         uses: azure/docker-login@v1

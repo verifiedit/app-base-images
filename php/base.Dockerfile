@@ -1,5 +1,8 @@
 FROM php:8-apache-buster
 
+RUN apt-get update
+RUN apt-get install -y gnupg
+
 # Install base PHP extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions bcmath gd
