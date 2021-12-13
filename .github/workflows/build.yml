@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # Schedule to build weekly
+    # Sunday 12pm
+    - cron: '0 1 * * 0'
 
 jobs:
   build-base-image:
@@ -34,7 +38,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build image
-        run: docker build -t ghcr.io/verifiedit/php:sqlsrv-${GITHUB_RUN_NUMBER} -t ghcr.io/verifiedit/php:sqlsrv-latest -f ./php/sqlsrv.base.Dockerfile ./php
+        run: docker build -t ghcr.io/verifiedit/php:sqlsrv-${GITHUB_RUN_NUMBER} -t ghcr.io/verifiedit/php:sqlsrv-latest -f ./php/sqlsrv.Dockerfile ./php
 
       - name: Login to GHCR
         uses: azure/docker-login@v1
