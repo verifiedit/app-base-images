@@ -1,0 +1,27 @@
+---
+name: Build PHP Base Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build -t ghcr.io/verifiedit/php:${GITHUB_RUN_NUMBER} -t ghcr.io/verifiedit/php:latest ./php
+
+      - name: Login to GHCR
+        uses: azure/docker-login@v1
+        with:
+          login-server: ghcr.io
+          username: $GITHUB_ACTOR
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push image(s) 🚀
+        run: docker ghcr.io/verifiedit/php --all-tags
