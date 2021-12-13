@@ -24,4 +24,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push image(s) 🚀
-        run: docker ghcr.io/verifiedit/php --all-tags
+        run: docker push ghcr.io/verifiedit/php --all-tags
