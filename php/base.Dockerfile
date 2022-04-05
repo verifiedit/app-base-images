@@ -5,7 +5,7 @@ RUN apt-get install -y gnupg
 
 # Install base PHP extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions bcmath gd pdo_mysql redis
+RUN install-php-extensions bcmath gd pdo_mysql redis pcntl
 
 # Enable Apache 2 rewrite module
 RUN a2enmod rewrite
